@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonita Store - Cables</title>
+  <link rel="icon" href="images/96bf40df-1f5d-4a52-b2f7-d46cd6976a88 2.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap');
+
+    :root {
+      --bg-main: #f8f0e6;          /* Fondo beige claro */
+      --card-bg: #ffffff;          /* Fondo blanco de tarjetas */
+      --text-dark: #1a1a1a;        /* Texto principal */
+      --price-blue: #0056b3;       /* Azul distintivo de precios */
+      --accent-pink: #d9777f;      /* Rosa de navegación / activo */
+      --border-light: #e2e2e2;
+      --stock-green: #2e7d32;
+      --stock-green-bg: #e8f5e9;
+      --nostock-red: #c62828;
+      --nostock-red-bg: #ffebee;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Playfair Display", serif;
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      padding-bottom: 80px;
+    }
+
+    /* --- HEADER & NAV --- */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: #fbf6f0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #eee;
+    }
+
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Botón Hamburguesa de móvil */
+    .menu-toggle {
+      display: none;
+      background: transparent;
+      border: 1px solid #dcd6cd;
+      border-radius: 8px;
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+      margin: 15px auto 0 auto;
+      cursor: pointer;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .menu-toggle svg {
+      width: 24px;
+      height: 24px;
+      stroke: #333;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-size: 0.9rem;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--accent-pink);
+      font-weight: 500;
+    }
+
+    /* --- TÍTULO PRINCIPAL --- */
+    .category-title {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-weight: 400;
+      margin: 30px 0 40px 0;
+      color: #2c2c2c;
+    }
+
+    /* --- GRID DE PRODUCTOS --- */
+    .products-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    }
+
+    .image-container {
+      width: 100%;
+      height: 230px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .stock-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+
+    .stock-tag.in-stock {
+      background-color: var(--stock-green-bg);
+      color: var(--stock-green);
+    }
+
+    .stock-tag.no-stock {
+      background-color: var(--nostock-red-bg);
+      color: var(--nostock-red);
+    }
+
+    .product-info {
+      padding: 18px 15px 15px 15px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .product-name {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #222;
+      margin-bottom: 10px;
+      min-height: 42px;
+      line-height: 1.3;
+    }
+
+    .product-price {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--price-blue);
+      margin-bottom: 15px;
+    }
+
+    .btn-details {
+      width: 100%;
+      padding: 8px 0;
+      background-color: #FF758F;
+      color: #f8f0e6;
+      border: 1px solid var(--text-dark);
+      border-radius: 2px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-details:hover {
+      background-color: #c74155;
+      color: white;
+    }
+
+    /* --- ESTILOS DEL MODAL --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: #fff;
+      width: 100%;
+      max-width: 800px;
+      max-height: 90vh;
+      border-radius: 12px;
+      overflow-y: auto;
+      position: relative;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.8rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .modal-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-main-img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #eee;
+    }
+
+    .modal-thumbnails {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .modal-thumb {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border 0.2s;
+    }
+
+    .modal-thumb.active {
+      border-color: var(--accent-pink);
+    }
+
+    .modal-details-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .modal-price {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--price-blue);
+      margin-bottom: 10px;
+    }
+
+    .modal-description {
+      font-size: 0.85rem;
+      color: #444;
+      line-height: 1.6;
+      white-space: pre-line;
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    /* --- BOTÓN FLOTANTE --- */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background-color: #fff;
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--accent-pink);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: transform 0.2s;
+    }
+    .whatsapp-btn:hover{
+      background-color: #FF758F;
+      color: #f8f0e6;
+    }
+
+    .loading-status {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 0;
+      font-size: 1.1rem;
+      color: #777;
+    }
+    .search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 15px;
+}
+
+.search-box input {
+  padding: 8px 35px 8px 15px;
+  border: 1px solid #FF758F;
+  border-radius: 20px;
+  background-color: #f8f0e6;
+  color: #FF758F;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  width: 180px;
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  width: 230px;
+  border-color: #c74155;
+  box-shadow: 0 2px 8px rgba(217, 119, 127, 0.15);
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  stroke: #888;
+  pointer-events: none;
+}
+
+
+    /* --- REGLAS RESPONSIVAS --- */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 20px;
+        align-items: center;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      nav {
+        width: 100%;
+        display: none;
+        margin-top: 15px;
+      }
+
+      nav.open {
+        display: block;
+      }
+
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        background: #f1ebe3;
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .category-title {
+        font-size: 2.2rem;
+        margin: 20px 0 30px 0;
+      }
+
+      .modal-content {
+        grid-template-columns: 1fr;
+      }
+        .search-box {
+        width: 100%;
+        margin: 10px 0;
+      }
+      .search-box input, .search-box input:focus {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+<header>
+  <div class="brand">
+    <img src="Images/Diseño sin título.png" alt="Bonita Store Logo" class="brand-logo" onerror="this.style.display='none'">
+    <span class="brand-name">Bonita Store</span>
+  </div>
+
+  <!-- BARRA DE BÚSQUEDA AGREGADA -->
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="Buscar productos..." onkeyup="filterProducts()">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+  </div>
+
+  <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">Abrir menú
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+
+  <nav id="nav-menu">
+    <ul>
+      <li><a href="Inicio.html">Inicio</a></li>
+      <li><a href="parlantes.html">Parlantes</a></li>
+      <li><a href="cargadores.html">Cargadores</a></li>
+      <li><a href="cables.html">Cables</a></li>
+      <li><a href="fundas.html">Fundas</a></li>
+      <li><a href="relojes.html">Relojes</a></li>
+      <li><a href="auriculares.html">Auriculares</a></li>
+      <li><a href="otros.html">Otros Accesorios</a></li>
+    </ul>
+  </nav>
+</header>
+
+  <!-- TÍTULO DESTACADOS -->
+  <h1 class="category-title">Cables</h1>
+
+  <main class="products-container" id="products-container">
+    <div class="loading-status">Cargando cables...</div>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      
+      <div class="modal-gallery">
+        <img id="modal-main-img" class="modal-main-img" src="" alt="Producto">
+        <div class="modal-thumbnails" id="modal-thumbnails"></div>
+      </div>
+
+      <div class="modal-details-info">
+        <h2 class="modal-title" id="modal-title"></h2>
+        <div id="modal-stock-container"></div>
+        <div class="modal-price" id="modal-price"></div>
+        <div class="modal-description" id="modal-description"></div>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://wa.link/i7wfwe" target="_blank" class="whatsapp-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+    </svg>
+    Escríbenos
+  </a>
+
+  <script>
+  const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThTBnYFBj0A4Bdjp39QnfNrbnVn5ivDQmYaIMKpGP8AVMdkIIpoKcyqTlirwtHsBbvHY1cc9kqZPct/pub?output=csv';
+  
+  // Cambia esta variable según la página (ej: 'destacados', 'auriculares', 'cargadores', etc.)
+  const CATEGORIA_FILTRO = 'cables'; 
+
+  let globalProducts = [];
+  let categoryProducts = [];
+
+  const menuToggle = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('open');
+    });
+  }
+
+  function parseCSV(text) {
+    const p = [[]];
+    let row = p[0];
+    let inQuotes = false;
+    let field = '';
+
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      const next = text[i + 1];
+
+      if (c === '"') {
+        if (inQuotes && next === '"') {
+          field += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (c === ',' && !inQuotes) {
+        row.push(field);
+        field = '';
+      } else if ((c === '\r' || c === '\n') && !inQuotes) {
+        if (c === '\r' && next === '\n') i++;
+        row.push(field);
+        field = '';
+        row = [];
+        p.push(row);
+      } else {
+        field += c;
+      }
+    }
+
+    if (field || row.length > 0) row.push(field);
+
+    const cleanRows = p.filter(r => r.length > 1 || (r.length === 1 && r[0].trim() !== ''));
+    if (cleanRows.length < 2) return [];
+
+    const headers = cleanRows[0].map(h => h.trim().toLowerCase().replace(/^"|"$/g, ''));
+    const items = [];
+
+    for (let i = 1; i < cleanRows.length; i++) {
+      const rowData = cleanRows[i];
+      if (rowData.length >= headers.length && rowData[0].trim() !== '') {
+        const obj = {};
+        headers.forEach((h, idx) => {
+          obj[h] = rowData[idx] ? rowData[idx].trim() : '';
+        });
+        items.push(obj);
+      }
+    }
+    return items;
+  }
+
+  function formatPrice(val) {
+    if (!val) return '$0';
+    if (val.toString().startsWith('$')) return val;
+    return '$' + val;
+  }
+
+  function checkStock(stockVal) {
+    const val = (stockVal || '').trim().toUpperCase();
+    if (val === 'SI' || val === 'SÍ') {
+      return { isAvailable: true, label: 'En Stock', cssClass: 'in-stock' };
+    }
+    return { isAvailable: false, label: 'Sin Stock', cssClass: 'no-stock' };
+  }
+
+  // FUNCIÓN PARA DIBUJAR TARJETAS EN PANTALLA
+  function renderProducts(productsList) {
+    const container = document.getElementById('products-container');
+
+    if (productsList.length === 0) {
+      container.innerHTML = '<div class="loading-status">No se encontraron productos que coincidan con la búsqueda.</div>';
+      return;
+    }
+
+    container.innerHTML = '';
+
+    productsList.forEach((prod) => {
+      const nombre = prod.producto || prod.nombre || 'Producto';
+      const precio = prod.precio || '0';
+      const stockInfo = checkStock(prod.stock);
+      const rawImgs = prod.imagen_url || prod.imagen_url_1 || '';
+      const primeraImagen = rawImgs.split(',')[0].trim() || 'https://via.placeholder.com/300x300?text=Sin+Imagen';
+
+      // Guardamos el índice real dentro de globalProducts para que abra bien el modal
+      const globalIndex = globalProducts.indexOf(prod);
+
+      const card = document.createElement('article');
+      card.className = 'product-card';
+
+      card.innerHTML = `
+        <div class="image-container">
+          <img class="product-img" src="${primeraImagen}" alt="${nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x300?text=Sin+Imagen'">
+        </div>
+        <div class="product-info">
+          <span class="stock-tag ${stockInfo.cssClass}">${stockInfo.label}</span>
+          <h2 class="product-name">${nombre}</h2>
+          <div class="product-price">${formatPrice(precio)}</div>
+          <button class="btn-details" onclick="openModal(${globalIndex})">Ver detalles</button>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  // CARGA INICIAL
+  async function loadProducts() {
+    const container = document.getElementById('products-container');
+
+    try {
+      const response = await fetch(CSV_URL);
+      if (!response.ok) throw new Error('Error de conexión');
+
+      const csvText = await response.text();
+      globalProducts = parseCSV(csvText);
+
+      // Filtrar por la categoría de la página actual
+      categoryProducts = globalProducts.filter(p => {
+        const cat = (p.categoria || '').toLowerCase().trim();
+        return cat === CATEGORIA_FILTRO || cat === CATEGORIA_FILTRO.slice(0, -1);
+      });
+
+      // Si es Inicio o no encuentra la categoría, muestra todos
+      if (categoryProducts.length === 0 && CATEGORIA_FILTRO === 'destacados') {
+        categoryProducts = globalProducts;
+      }
+
+      renderProducts(categoryProducts);
+
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = '<div class="loading-status">⚠️ Ocurrió un error al cargar el catálogo.</div>';
+    }
+  }
+
+  // BÚSQUEDA GLOBAL EN TIEMPO REAL
+  function filterProducts() {
+    const searchInput = document.getElementById('search-input');
+    if (!searchInput) return;
+
+    const searchTerm = searchInput.value.toLowerCase().trim();
+
+    // 1. Si el usuario borra la búsqueda, vuelve a los productos de la categoría actual
+    if (searchTerm === '') {
+      renderProducts(categoryProducts);
+      return;
+    }
+
+    // 2. Si escribe algo, busca en TODOS los productos de la tienda (globalProducts)
+    const filtered = globalProducts.filter(prod => {
+      const nombre = (prod.producto || prod.nombre || '').toLowerCase();
+      const descripcion = (prod.descripcion || '').toLowerCase();
+      const categoria = (prod.categoria || '').toLowerCase();
+      
+      return nombre.includes(searchTerm) || 
+             descripcion.includes(searchTerm) || 
+             categoria.includes(searchTerm);
+    });
+
+    renderProducts(filtered);
+  }
+
+  // MODAL
+  function openModal(index) {
+    const prod = globalProducts[index];
+    if (!prod) return;
+
+    const stockInfo = checkStock(prod.stock);
+
+    document.getElementById('modal-title').innerText = prod.producto || prod.nombre || '';
+    document.getElementById('modal-stock-container').innerHTML = `<span class="stock-tag ${stockInfo.cssClass}">${stockInfo.label}</span>`;
+    document.getElementById('modal-price').innerText = formatPrice(prod.precio);
+    document.getElementById('modal-description').innerText = prod.descripcion || 'Sin descripción disponible.';
+
+    const rawImgs = prod.imagen_url || '';
+    const imgList = rawImgs.split(',').map(url => url.trim()).filter(url => url.length > 0);
+    
+    const mainImg = document.getElementById('modal-main-img');
+    const thumbsContainer = document.getElementById('modal-thumbnails');
+    
+    thumbsContainer.innerHTML = '';
+
+    if (imgList.length > 0) {
+      mainImg.src = imgList[0];
+
+      if (imgList.length > 1) {
+        imgList.forEach((url, i) => {
+          const thumb = document.createElement('img');
+          thumb.src = url;
+          thumb.className = `modal-thumb ${i === 0 ? 'active' : ''}`;
+          thumb.onclick = () => {
+            mainImg.src = url;
+            document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+          };
+          thumbsContainer.appendChild(thumb);
+        });
+      }
+    } else {
+      mainImg.src = 'https://via.placeholder.com/300x300?text=Sin+Imagen';
+    }
+
+    document.getElementById('product-modal').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('product-modal').classList.remove('active');
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById('product-modal');
+    if (event.target === modal) {
+      closeModal();
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', loadProducts);
+</script>
+</body>
+</html>
