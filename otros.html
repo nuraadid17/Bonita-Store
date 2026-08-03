@@ -362,40 +362,177 @@
       font-size: 1.1rem;
       color: #777;
     }
-    .search-box {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin: 0 15px;
-}
+  .search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+  }
 
-.search-box input {
-  padding: 8px 35px 8px 15px;
-  border: 1px solid #FF758F;
-  border-radius: 20px;
-  background-color: #f8f0e6;
-  color: #FF758F;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.85rem;
-  outline: none;
-  width: 180px;
-  transition: all 0.3s ease;
-}
+  .search-box input {
+    padding: 8px 35px 8px 15px;
+    border: 1px solid #FF758F;
+    border-radius: 20px;
+    background-color: #f8f0e6;
+    color: #FF758F;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    width: 180px;
+    transition: all 0.3s ease;
+  }
 
-.search-box input:focus {
-  width: 230px;
-  border-color: #c74155;
-  box-shadow: 0 2px 8px rgba(217, 119, 127, 0.15);
-}
+  .search-box input:focus {
+    width: 230px;
+    border-color: #c74155;
+    box-shadow: 0 2px 8px rgba(217, 119, 127, 0.15);
+  }
 
-.search-icon {
-  position: absolute;
-  right: 12px;
-  width: 16px;
-  height: 16px;
-  stroke: #888;
-  pointer-events: none;
-}
+  .search-icon {
+    position: absolute;
+    right: 12px;
+    width: 16px;
+    height: 16px;
+    stroke: #888;
+    pointer-events: none;
+  }
+  /* --- VARIABLES MODO OSCURO --- */
+  body.dark-mode {
+    --bg-main: #121212;
+    --card-bg: #1e1e1e;
+    --text-dark: #f0f0f0;
+    --price-blue: #64b5f6;
+    --border-light: #333333;
+  }
+
+  body.dark-mode header,
+  body.dark-mode .product-card,
+  body.dark-mode .modal-content,
+  body.dark-mode .whatsapp-btn,
+  body.dark-mode .accessibility-panel {
+    background-color: var(--card-bg);
+    color: var(--text-dark);
+  }
+
+  body.dark-mode .product-name,
+  body.dark-mode .category-title,
+  body.dark-mode .modal-title,
+  body.dark-mode .brand-name,
+  body.dark-mode nav a {
+    color: #ffffff;
+  }
+
+  body.dark-mode .btn-details {
+    border-color: #ffffff;
+    color: #ffffff;
+  }
+
+  body.dark-mode .btn-details:hover {
+    background: #ffffff;
+    color: #121212;
+  }
+
+  /* --- BOTÓN Y PANEL DE ACCESIBILIDAD (INFERIOR IZQUIERDA) --- */
+  .accessibility-wrapper {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    z-index: 1001;
+  }
+
+  .accessibility-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #0056b3; /* Azul accesible */
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background-color 0.2s;
+  }
+
+  .accessibility-btn:hover {
+    transform: scale(1.08);
+    background-color: #004085;
+  }
+
+  .accessibility-btn svg {
+    width: 26px;
+    height: 26px;
+    stroke: #ffffff;
+  }
+
+  .accessibility-panel {
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    width: 240px;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .accessibility-panel.active {
+    display: flex;
+  }
+
+  .accessibility-panel h3 {
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+  }
+
+  .access-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+
+  .font-controls {
+    display: flex;
+    gap: 5px;
+  }
+
+  .font-controls button {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    background: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .font-controls button:hover {
+    background: #e0e0e0;
+  }
+
+  .theme-toggle-btn {
+    padding: 6px 12px;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+
+  .accessibility-panel hr {
+    border: none;
+    border-top: 1px solid var(--border-light);
+  }
+
 
 
     /* --- REGLAS RESPONSIVAS --- */
@@ -519,6 +656,43 @@
     </svg>
     Escríbenos
   </a>
+    <!-- BOTÓN FLOTANTE DE ACCESIBILIDAD -->
+  <div class="accessibility-wrapper">
+    <button class="accessibility-btn" id="access-btn" aria-label="Opciones de Accesibilidad" onclick="toggleAccessMenu()">
+      <!-- Ícono SVG de personita / accesibilidad -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="4" r="2"></circle>
+        <path d="M12 6v6"></path>
+        <path d="M6 8h12"></path>
+        <path d="M9 20l3-8 3 8"></path>
+      </svg>
+    </button>
+
+    <!-- PANEL DE OPCIONES -->
+    <div class="accessibility-panel" id="access-panel">
+      <h3>Accesibilidad</h3>
+      
+      <!-- Modificador de letra -->
+      <div class="access-option">
+        <span>Tamaño de letra:</span>
+        <div class="font-controls">
+          <button onclick="changeFontSize(-1)" title="Disminuir letra">A-</button>
+          <button onclick="resetFontSize()" title="Restablecer letra">100%</button>
+          <button onclick="changeFontSize(1)" title="Aumentar letra">A+</button>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- Switch de Modo Oscuro -->
+      <div class="access-option">
+        <span>Modo Oscuro:</span>
+        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleDarkMode()">
+          🌙 Activar
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script>
   const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThTBnYFBj0A4Bdjp39QnfNrbnVn5ivDQmYaIMKpGP8AVMdkIIpoKcyqTlirwtHsBbvHY1cc9kqZPct/pub?output=csv';
@@ -754,7 +928,88 @@
       closeModal();
     }
   };
+  // --- FUNCIONES DE ACCESIBILIDAD ---
 
+  let currentFontLevel = 0; // 0 = Normal, 1 = Grande, 2 = Muy Grande, -1 = Pequeña
+
+  function toggleAccessMenu() {
+    const panel = document.getElementById('access-panel');
+    panel.classList.toggle('active');
+  }
+
+  // Cambiar tamaño de letra
+  function changeFontSize(direction) {
+    const body = document.body;
+    
+    if (direction === 1 && currentFontLevel < 3) {
+      currentFontLevel++;
+    } else if (direction === -1 && currentFontLevel > -2) {
+      currentFontLevel--;
+    }
+
+    applyFontSize();
+  }
+
+  function resetFontSize() {
+    currentFontLevel = 0;
+    applyFontSize();
+  }
+
+  function applyFontSize() {
+    // Ajusta el zoom/tamaño del texto base
+    const sizes = {
+      '-2': '85%',
+      '-1': '92%',
+      '0': '100%',
+      '1': '110%',
+      '2': '122%',
+      '3': '135%'
+    };
+
+    document.documentElement.style.fontSize = sizes[currentFontLevel] || '100%';
+    localStorage.setItem('fontLevel', currentFontLevel);
+  }
+
+  // Cambiar Modo Oscuro
+  function toggleDarkMode() {
+    const isDark = document.body.classList.toggle('dark-mode');
+    const btn = document.getElementById('theme-btn');
+    
+    if (isDark) {
+      btn.innerHTML = '☀️ Claro';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      btn.innerHTML = '🌙 Oscuro';
+      localStorage.setItem('theme', 'light');
+    }
+  }
+
+  // Cargar preferencias guardadas del usuario al abrir la página
+  document.addEventListener('DOMContentLoaded', () => {
+    // Cargar tamaño de letra guardado
+    const savedFont = localStorage.getItem('fontLevel');
+    if (savedFont !== null) {
+      currentFontLevel = parseInt(savedFont);
+      applyFontSize();
+    }
+
+    // Cargar tema guardado
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+      const btn = document.getElementById('theme-btn');
+      if (btn) btn.innerHTML = '☀️ Claro';
+    }
+  });
+
+  // Cerrar panel al hacer clic afuera
+  window.addEventListener('click', (e) => {
+    const wrapper = document.querySelector('.accessibility-wrapper');
+    const panel = document.getElementById('access-panel');
+    if (wrapper && !wrapper.contains(e.target)) {
+      panel.classList.remove('active');
+    }
+  });
   document.addEventListener('DOMContentLoaded', loadProducts);
 </script>
 </body>
